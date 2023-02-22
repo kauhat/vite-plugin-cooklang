@@ -10,6 +10,7 @@ describe("integration", () => {
   it("builds", async () => {
     await build({
       root: EXAMPLE_PROJECT_DIR,
+      base: "./",
       build: {
         rollupOptions: {
           // ...
