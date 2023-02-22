@@ -1,6 +1,3 @@
-// import { realpath, realpathSync } from 'fs'
-import { resolve } from "path";
-// import { cwd } from 'process'
 import { Plugin, TransformResult } from "vite";
 import { loadEnv } from "vite";
 import { createFilter, FilterPattern } from "@rollup/pluginutils";
@@ -18,8 +15,6 @@ export function ViteCooklangRecipeLoaderPlugin(
 
   const filter = createFilter(options.include ?? fileRegex, options.exclude);
 
-  // const loadedRecipes: Map<string, Recipe> = new Map()
-
   return {
     name: "cooklang-loader",
     // enforce: 'pre',
@@ -35,15 +30,14 @@ export function ViteCooklangRecipeLoaderPlugin(
 
       // Parse the recipe...
       const recipe = new Recipe(source);
-      // loadedRecipes.set(path, recipe)
 
-      // Add
+      // Add some extra metadata...
       recipe.metadata["_import_path"] = path;
       recipe.metadata["_import_query"] = _query;
 
       //
       return {
-        code: recipeToJS(recipe, true),
+        code: recipeToJSONTransform(recipe, true),
         map: null,
         // deps: ['@cooklang/cooklang-ts'],
         // dynamicDeps: ['@cooklang/cooklang-ts'],
@@ -54,15 +48,16 @@ export function ViteCooklangRecipeLoaderPlugin(
 
 // export default ViteCooklangRecipeLoaderPlugin;
 
-function recipeToJS(recipe: Recipe, includeSource = false) {
+function recipeToJSONTransform(recipe: Recipe, includeSource: boolean) {
   const { ingredients, cookwares, metadata, steps, shoppingList } = recipe;
 
   return (
-    (!includeSource
-      ? ""
-      : `export const source = ${JSON.stringify(recipe.toCooklang())}\n\n`) +
+    (includeSource
+      ? `export const source = ${JSON.stringify(recipe.toCooklang())}\n\n`
+      : ``) +
     `
   export const recipe = ${JSON.stringify(recipe)}
+
   export default recipe
   `
   );
