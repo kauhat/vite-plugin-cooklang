@@ -1,11 +1,9 @@
+// import { realpath, realpathSync } from 'fs'
+import { resolve } from "path";
+// import { cwd } from 'process'
 import { Plugin, TransformResult } from "vite";
 import { loadEnv } from "vite";
-// import { readFile, writeFile, realpath } from 'fs/promises'
-// import { realpath, realpathSync } from 'fs'
 import { createFilter, FilterPattern } from "@rollup/pluginutils";
-
-// import { cwd } from 'process'
-import { resolve } from "path";
 import { Recipe } from "@cooklang/cooklang-ts";
 
 export type ViteCooklangPluginOptions = {
@@ -32,32 +30,20 @@ export function ViteCooklangRecipeLoaderPlugin(
         return null;
       }
 
-      // Resolve the imported path and load the file.
+      // Resolve the imported path.
       const [path, _query] = id.split("?", 2);
-      // const resolvedPath = realpathSync(path)
-
-      // const source: string = await readFile(path, 'utf-8')
-      // return
 
       // Parse the recipe...
       const recipe = new Recipe(source);
       // loadedRecipes.set(path, recipe)
 
-      console.log({recipe})
+      // Add
+      recipe.metadata["_import_path"] = path;
+      recipe.metadata["_import_query"] = _query;
 
-      // //
+      //
       return {
-        code: `
-            import { Recipe } from '@cooklang/cooklang-ts'
-
-            export const source = ${JSON.stringify(source)}
-            // export const object = $#{recipe.toCooklang()}
-            // export const recipe = new Recipe(source)
-
-            export default source
-
-            // export default $#{JSON.stringify(recipe)}
-          `,
+        code: recipeToJS(recipe, true),
         map: null,
         // deps: ['@cooklang/cooklang-ts'],
         // dynamicDeps: ['@cooklang/cooklang-ts'],
@@ -67,3 +53,17 @@ export function ViteCooklangRecipeLoaderPlugin(
 }
 
 // export default ViteCooklangRecipeLoaderPlugin;
+
+function recipeToJS(recipe: Recipe, includeSource = false) {
+  const { ingredients, cookwares, metadata, steps, shoppingList } = recipe;
+
+  return (
+    (!includeSource
+      ? ""
+      : `export const source = ${JSON.stringify(recipe.toCooklang())}\n\n`) +
+    `
+  export const recipe = ${JSON.stringify(recipe)}
+  export default recipe
+  `
+  );
+}
