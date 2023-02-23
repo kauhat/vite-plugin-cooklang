@@ -8,7 +8,7 @@ const EXAMPLE_PROJECT_DIR = path.resolve(__dirname, "./example");
 
 describe("integration", () => {
   it("builds", async () => {
-    await build({
+    const output = await build({
       root: EXAMPLE_PROJECT_DIR,
       base: "./",
       build: {
@@ -19,6 +19,6 @@ describe("integration", () => {
       },
     });
 
-    expect(1 + 1).eq(2);
+    expect(output).not.toBeNull;
   });
 });
