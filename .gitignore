@@ -10,4 +10,5 @@ types
 *.env*
 
 !build.config.ts
+!vite.config.ts
 !vitest.config.ts

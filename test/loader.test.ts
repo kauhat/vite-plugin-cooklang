@@ -11,12 +11,6 @@ describe("integration", () => {
     const output = await build({
       root: EXAMPLE_PROJECT_DIR,
       base: "./",
-      build: {
-        rollupOptions: {
-          // ...
-          plugins: [ViteCooklangRecipeLoaderPlugin()],
-        },
-      },
     });
 
     expect(output).not.toBeNull;
