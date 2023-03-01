@@ -1,5 +1,4 @@
 import { Plugin, TransformResult } from "vite";
-import { loadEnv } from "vite";
 import { createFilter, FilterPattern } from "@rollup/pluginutils";
 import { Recipe } from "@cooklang/cooklang-ts";
 
@@ -8,7 +7,7 @@ export type ViteCooklangPluginOptions = {
   exclude?: FilterPattern;
 };
 
-export function ViteCooklangRecipeLoaderPlugin(
+export default function ViteCooklangRecipeLoaderPlugin(
   options: ViteCooklangPluginOptions = {}
 ): Plugin {
   const fileRegex = /\.cook$/;

@@ -1,6 +1,6 @@
 import { defineConfig } from "vite";
-import { ViteCooklangRecipeLoaderPlugin } from "../../src/index";
+import cooklang from "../../src/index";
 
 export default defineConfig({
-  plugins: [ViteCooklangRecipeLoaderPlugin()],
+  plugins: [cooklang()],
 });

@@ -19,10 +19,10 @@ Add the plugin to your Vite config as below:
 ```js
 // vite.config.js
 import { defineConfig } from "vite";
-import { ViteCooklangRecipeLoaderPlugin } from "vite-plugin-cooklang";
+import cooklang from "vite-plugin-cooklang";
 
 export default defineConfig({
-  plugins: [ViteCooklangRecipeLoaderPlugin()],
+  plugins: [cooklang()],
 });
 ```
 
@@ -34,11 +34,12 @@ Recipes are loaded using the [Cooklang-TS](https://github.com/cooklang/cooklang-
 import recipe from "./test/example/recipes/Easy Pancakes.cook";
 
 const {
-    ingredients,
-    cookwares,
-    metadata,
-    steps,
-    shoppingList
+  //
+  ingredients,
+  cookwares,
+  metadata,
+  steps,
+  shoppingList,
 } = recipe;
 ```
 
