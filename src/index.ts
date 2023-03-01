@@ -27,16 +27,12 @@ export default function ViteCooklangRecipeLoaderPlugin(
       // Resolve the imported path.
       const [path, _query] = id.split("?", 2);
 
-      // Parse the recipe...
-      const recipe = new Recipe(source);
-
-      // Add some extra metadata...
-      recipe.metadata["_import_path"] = path;
-      recipe.metadata["_import_query"] = _query;
+      const code = sourceToJSONTransform(source, path, true);
+      // const code = sourceToRecipeTransform(source, path, true)
 
       //
       return {
-        code: recipeToJSONTransform(recipe, true),
+        code,
         map: null,
         // deps: ['@cooklang/cooklang-ts'],
         // dynamicDeps: ['@cooklang/cooklang-ts'],
@@ -45,10 +41,16 @@ export default function ViteCooklangRecipeLoaderPlugin(
   };
 }
 
-// export default ViteCooklangRecipeLoaderPlugin;
+function sourceToJSONTransform(
+  source: string,
+  path: string,
+  includeSource: boolean
+) {
+  // Parse the recipe...
+  const recipe = new Recipe(source);
 
-function recipeToJSONTransform(recipe: Recipe, includeSource: boolean) {
-  const { ingredients, cookwares, metadata, steps, shoppingList } = recipe;
+  // Add some extra metadata...
+  recipe.metadata["import_path"] = path;
 
   return (
     (includeSource
@@ -60,4 +62,25 @@ function recipeToJSONTransform(recipe: Recipe, includeSource: boolean) {
   export default recipe
   `
   );
+}
+
+function sourceToRecipeTransform(
+  source: string,
+  path: string,
+  includeSource: boolean
+) {
+  return `import { Recipe } from "@cooklang/cooklang-ts";
+
+  export const path = ${JSON.stringify(path)}
+
+  export const source = ${JSON.stringify(source)}
+
+  // Parse the recipe...
+  export const recipe = new Recipe(source)
+
+  // Add some extra metadata...
+  recipe.metadata["import_path"] = path;
+
+  export default recipe
+  `;
 }
