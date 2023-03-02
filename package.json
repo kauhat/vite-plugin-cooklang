@@ -24,7 +24,8 @@
     "build": "unbuild",
     "dev": "vitest dev",
     "test": "vitest",
-    "coverage": "vitest run --coverage"
+    "coverage": "vitest run --coverage",
+    "update-examples": "git subtree pull --prefix test/example/spec git@github.com:cooklang/spec.git main --squash"
   },
   "devDependencies": {
     "@cooklang/cooklang-ts": "^1.2.3",

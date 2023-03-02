@@ -1,4 +1,4 @@
-import recipe from "../recipes/Easy Pancakes.cook";
+import recipe from "../spec/examples/Easy Pancakes.cook";
 
 const { ingredients, cookwares, metadata, steps, shoppingList } = recipe;
 
